@@ -16,7 +16,7 @@ class AgentState(TypedDict):
 
 def load_api_key() -> str:
     load_dotenv()
-    api_key = os.getenv("ZZZ_API_KEY")
+    api_key = os.getenv("ZZZ_API_KEY")  #get api key from "exported environment variable" using cmd. if no, then from .env file
     if not api_key:
         raise ValueError("ZZZ_API_KEY not found.")
     return api_key
@@ -48,7 +48,7 @@ def build_agent() -> StateGraph:
     graph.add_node("process", process)
     graph.add_edge(START, "process")
     graph.add_edge("process", END)
-    return graph.compile()
+    return graph.compile()  #agent refers to the compiled graph
 
 
 def main() -> None:
@@ -57,7 +57,9 @@ def main() -> None:
 
     agent = build_agent()
     user_input = input("Enter: ")
-    agent.invoke({"messages": [HumanMessage(content=user_input)]})
+    while user_input != "exit": # keep talking as long as the user doesn't want to exit
+        agent.invoke({"messages": [HumanMessage(content=user_input)]})
+        user_input = input("Enter: ")
 
 
 if __name__ == "__main__":
