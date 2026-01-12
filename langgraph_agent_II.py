@@ -1,11 +1,10 @@
 """
 Objectvies
 1. use different message types: HumanMessage, AIMessage
-2. ⭐️ history maintenance
+2. history maintenance
 
-Obstacles
-since in mainland china, we can't directly pay openai api, so we use zhizengzeng proxy here, which means
-we have to use "openai lib" instead of langchain's "chatopenai"
+Clarification
+in this code, we use openai to call models. but actually we can directly use chatopenai from langchain. zhizengzeng supports that.
 """
 
 import os
@@ -83,6 +82,21 @@ def build_agent(api_key: str) -> StateGraph:
     return graph.compile()
 
 
+def log_conversation(
+    conversation_history: List[Union[HumanMessage, AIMessage]],
+    file_path: str = "logging.txt",
+) -> None:
+    with open(file_path, "w", encoding="utf-8") as file:
+        file.write("Your Conversation Log:\n")
+        for message in conversation_history:
+            if isinstance(message, HumanMessage):
+                file.write(f"You: {message.content}\n")
+            elif isinstance(message, AIMessage):
+                file.write(f"AI: {message.content}\n\n")
+        file.write("End of Conversation\n")
+    
+        
+
 def main() -> None:
     api_key = load_api_key()
     send_test_request(api_key)
@@ -94,12 +108,21 @@ def main() -> None:
     while user_input != 'exit':
         conversation_history.append(HumanMessage(content=user_input))
         result = agent.invoke({"messages": conversation_history})
-        print(f'result is: {result}')
-        print('------------------------------')
         conversation_history = result["messages"]
         print(f'conversation history: {conversation_history}')
-        print('------------------------------')
+        for msg in conversation_history[-2:]:  # print only the last user and AI messages
+            role = "You" if isinstance(msg, HumanMessage) else "AI"
+            print(f"{role}: {msg.content}")
+        log_conversation(conversation_history)
+        
+        
+        
+        
+        print('--------𝜗ৎ--------------𝜗ৎ---------------𝜗ৎ---------')
         user_input = input("Enter: ")
+        
+    
+    
     
     
 if __name__ == "__main__":

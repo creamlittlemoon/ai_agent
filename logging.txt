@@ -1,0 +1,6 @@
+Your Conversation Log:
+You: hi, my name is LL
+AI: Hello, LL! Nice to meet you. How can I assist you today?
+You: i miss my son
+AI: I'm sorry you're feeling this way, LL. Missing someone you care about is so tough. If you'd like to talk more about it or share your feelings, I'm here to listen.
+End of Conversation recording
