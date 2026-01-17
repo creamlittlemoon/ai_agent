@@ -89,7 +89,7 @@ def our_agent(state: AgentState) -> AgentState:
     else:
         user_input = input("\nWhat would you like to do with the document?")
         print(f"\n UWER: {user_input}")
-        user_mesage = HumanMessage(content=user_input)
+        user_message = HumanMessage(content=user_input)
         
     all_messages = [system_prompt] + list(state["messages"]) + [user_message]
     
